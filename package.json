@@ -1,0 +1,24 @@
+{
+  "name": "namescraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scraper.mjs",
+  "scripts": {
+    "start": "node scraper.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brysoncamp/NameScraper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brysoncamp/NameScraper/issues"
+  },
+  "homepage": "https://github.com/brysoncamp/NameScraper#readme",
+  "dependencies": {
+    "axios": "^1.7.3",
+    "dotenv": "^16.4.5",
+    "xml2js": "^0.6.2"
+  }
+}
