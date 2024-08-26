@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
-
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import sparkle from "../assets/vectors/sparkle.svg";
 import search from "../assets/vectors/search.svg";
 
-const Search = () => {
+const Search = ({ textareaRef, enableMessages }) => {
   const [placeholder, setPlaceholder] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
@@ -14,8 +14,15 @@ const Search = () => {
   );
   const [shownMessages, setShownMessages] = useState([]);
   const [isDescribeNext, setIsDescribeNext] = useState(true);
+  const [textareaValue, setTextareaValue] = useState("");
 
-  const textareaRef = useRef(null);
+  const location = useLocation();
+  
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const term = searchParams.get("term") || "";
+    setTextareaValue(term);
+  }, [location.search]);
 
   const messages = [
     "A mobile app that tracks daily habits.",
@@ -41,10 +48,11 @@ const Search = () => {
   };
 
   useEffect(() => {
+    if (!enableMessages) return;
+
     const handleTyping = () => {
       if (!isTyping) return;
 
-      // Set the current message only when starting to type a new message
       if (!placeholder && !isDeleting) {
         const message = isDescribeNext
           ? "Describe your business idea."
@@ -64,7 +72,7 @@ const Search = () => {
       } else if (isDeleting && updatedText === "") {
         setIsDeleting(false);
         setLoopNum(loopNum + 1);
-        setIsDescribeNext(loopNum % 2 !== 0); // Alternate correctly after the first loop
+        setIsDescribeNext(loopNum % 2 !== 0);
         setTypingSpeed(50);
       } else if (isDeleting) {
         setTypingSpeed(15);
@@ -75,6 +83,7 @@ const Search = () => {
 
     return () => clearTimeout(timer);
   }, [
+    enableMessages,
     placeholder,
     isDeleting,
     loopNum,
@@ -90,36 +99,40 @@ const Search = () => {
   };
 
   const handleBlur = () => {
-    setIsDescribeNext(true); // Ensure the next message is "Describe your business idea."
+    setIsDescribeNext(true);
     setIsTyping(true);
   };
 
-  const handleInput = () => {
-    const textarea = textareaRef.current;
-    textarea.style.height = "auto"; // Reset height
-    textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height based on content
+  const handleChange = (e) => {
+    setTextareaValue(e.target.value); // Update the textarea value in state
+    if (textareaRef && textareaRef.current) {
+      const textarea = textareaRef.current;
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
   };
 
   return (
     <div className="search-container">
-        <div className="search">
-            <img className="search-icon" src={sparkle} draggable="false"/>
-            <textarea
-                ref={textareaRef}
-                className="search-input"
-                placeholder={placeholder}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                onInput={handleInput}
-                rows="1"
-            />
-            <div className="search-button">
-              <img src={search} draggable="false" />
-              <p>Search</p>
-            </div>
+      <div className="search">
+        <img className="search-icon" src={sparkle} draggable="false" alt="sparkle" />
+        <textarea
+          spellCheck="false"
+          ref={textareaRef}
+          className="search-input"
+          placeholder={placeholder}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onChange={handleChange} // Use onChange instead of onInput
+          value={textareaValue} // Controlled component
+          rows="1"
+        />
+        <div className="search-button">
+          <img src={search} draggable="false" alt="search" />
+          <p>Search</p>
         </div>
+      </div>
     </div>
-    
   );
 };
 
