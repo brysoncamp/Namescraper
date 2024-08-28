@@ -19,7 +19,9 @@
   },
   "homepage": "https://github.com/brysoncamp/NameScraper#readme",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "framer-motion": "^11.3.30",
+    "openai": "^4.56.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1"

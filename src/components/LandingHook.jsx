@@ -2,7 +2,7 @@ import React from "react";
 
 const LandingHook = () => {
   return (
-    <div>
+    <div className="landing">
       <h1 className="landing-hook">
         Find your perfect <br />
         domain 

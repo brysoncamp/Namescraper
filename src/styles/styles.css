@@ -27,6 +27,7 @@ html, body {
     display: flex;
     width: 50rem;
     border-radius: 2rem;
+    max-width: calc(100vw - 3rem);
 }
 
 .sticky-search {
@@ -42,9 +43,10 @@ html, body {
 .search-icon {
     height: 1.75rem;
     padding: 1rem 0 0 1.25rem;
+    user-select: none;
 }
 
-textarea {
+.search-input {
     flex: 1;
     padding: 1rem;
     font-family: "Red Hat Display", sans-serif;
@@ -61,9 +63,21 @@ textarea {
     transition: outline 0.1s ease;
     outline: 2px solid transparent;
     color: white;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    transition: height 0.3s ease-out;
+    overflow-y: hidden;
 }
 
-textarea::placeholder {
+.search-input-scroll {
+    overflow-y: auto;
+}
+
+.search-input::-webkit-scrollbar {
+    display: none;
+}
+
+.search-input::placeholder {
     color: white;
 }
 
@@ -123,7 +137,7 @@ textarea:focus {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-
+    transition: background-color 0.3s ease;
 }
 
 .search-button img {
@@ -137,6 +151,18 @@ textarea:focus {
     font-size: 1.25rem;
     margin-left: 0.25rem;
     user-select: none;
+}
+
+.search-button-enabled {
+    background-color: #b6e9e9;
+}
+
+.search-button-enabled p {
+    color: #212121;
+}
+
+.search-button-enabled img {
+    filter: invert(100%) sepia(5%) saturate(4321%) hue-rotate(315deg) brightness(93%) contrast(74%);
 }
 
 .topbar {
@@ -158,6 +184,10 @@ textarea:focus {
     line-height: 2rem;
     color: #eee;
     margin-left: 2rem;
+    pointer-events: auto;
+    user-select: none;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .signup-button {
@@ -195,6 +225,7 @@ textarea:focus {
 
 .get-started-container img {
     width: 5rem;
+    user-select: none;
 }
 
 .asterisk {
@@ -207,4 +238,63 @@ textarea:focus {
     font-size: 1.75rem;
     margin-right: 0rem;
     font-weight: 500;
+}
+
+/*
+.logo-hide {
+    display: none;
+}
+*/
+
+.landing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+@media (max-width: 80rem) {
+    .search {
+       
+    }
+}
+
+
+
+@media (max-width: 37.5rem) {
+
+    .landing-hook {
+        font-size: 2.125rem;
+        margin-top: 12vh;
+        margin-bottom: 4vh;
+    }
+
+    .landing-description {
+        font-size: 1rem;
+        width: calc(100vw - 1rem);
+    }
+
+
+    .topbar {
+        position: sticky;
+        background-color: #212121;
+        /*mask-image: linear-gradient(to bottom, #212121 90%, transparent 100%);*/
+    }
+  
+
+    .topbar::after {
+        content: '';
+        position: absolute;
+        bottom: -20px; 
+        left: 0;
+        right: 0;
+        height: 20px; 
+        background: linear-gradient(to top, transparent 0%, #212121 100%);
+        z-index: -1; 
+    }
+    
+
+    .logo-text {
+        font-size: 1.5rem;
+    }
 }

@@ -53,22 +53,25 @@ const HomePage = () => {
     };
   }, [isSticky]);
 
-  const handleClick = () => {
+  const handleSearch = () => {
     const searchTerm = textareaRef.current?.value || ""; // Get the value from the textarea
     navigate(`/search?term=${encodeURIComponent(searchTerm)}`); // Navigate with the search term as a query parameter
   };
 
   return (
     <div className="center-vertically">
-      <Topbar />
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}  // Fade out to transparent on exit
-        transition={{ duration: 0.25 }}
-      >
-        <LandingHook />
-      </motion.div>
+      <div>
+        <Topbar />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}  // Fade out to transparent on exit
+          transition={{ duration: 0.25 }}
+        >
+          <LandingHook />
+        </motion.div>
+      </div>
+   
 
       <motion.div
         ref={searchRef}
@@ -79,24 +82,19 @@ const HomePage = () => {
         className="sticky-search"
         style={{ position: "sticky", top: "0", zIndex: 10, backgroundColor: "white" }}
       >
-        <Search textareaRef={textareaRef} enableMessages={true} />
+        <Search textareaRef={textareaRef} enableMessages={true} handleSearch={handleSearch} />
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 1 }}
+        initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}  // Fade out to transparent on exit
         transition={{ duration: 0.25 }}
       >
         <GetStarted />
       </motion.div>
-      
-      <button onClick={handleClick}>Go to Search</button>
-      
-      {/* Spacer to allow scrolling */}
-      <div style={{ height: '2000px' }}></div>
 
-      <button onClick={handleClick}>Go to Search</button>
+      <div style={{ height: '2000px' }}></div>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import sparkle from "../assets/vectors/sparkle.svg";
 import search from "../assets/vectors/search.svg";
 
-const Search = ({ textareaRef, enableMessages }) => {
+const Search = ({ textareaRef, enableMessages, handleSearch }) => {
   const [placeholder, setPlaceholder] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
@@ -15,6 +15,12 @@ const Search = ({ textareaRef, enableMessages }) => {
   const [shownMessages, setShownMessages] = useState([]);
   const [isDescribeNext, setIsDescribeNext] = useState(true);
   const [textareaValue, setTextareaValue] = useState("");
+  //const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  const [TextareaScrollClass, setTextareaScrollClass] = useState(false);
+  const [buttonEnabled, setButtonEnabled] = useState(false);
+
+  const maxLines = 5;
 
   const location = useLocation();
   
@@ -96,21 +102,63 @@ const Search = ({ textareaRef, enableMessages }) => {
   const handleFocus = () => {
     setIsTyping(false);
     setPlaceholder("");
+    setTextareaScrollClass("search-input-scroll");
+
+    if (textareaRef && textareaRef.current) {
+      const textarea = textareaRef.current;
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
   };
 
   const handleBlur = () => {
     setIsDescribeNext(true);
     setIsTyping(true);
+    setTextareaScrollClass("");
+
+    if (textareaRef && textareaRef.current) {
+      const textarea = textareaRef.current;
+      const lineHeight = parseInt(window.getComputedStyle(textarea).lineHeight, 10);
+      textarea.style.height = `${lineHeight + 32}px`;
+
+      textarea.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && buttonEnabled) {
+      e.preventDefault(); // Prevent the default action (new line in textarea)
+      handleSearch();
+    }
   };
 
   const handleChange = (e) => {
-    setTextareaValue(e.target.value); // Update the textarea value in state
+    const value = e.target.value;
+    const lines = value.split('\n');
+  
+    // Enforce maximum number of lines
+    if (lines.length > maxLines) {
+      // Trim excess lines
+      setTextareaValue(lines.slice(0, maxLines).join('\n'));
+    } else {
+      setTextareaValue(value);
+      //setTextareaValue(value);
+    }
+  
+    // Update button enabled status based on textarea content
+    setButtonEnabled(value.trim() !== "");
+  
+    // Adjust textarea height dynamically
     if (textareaRef && textareaRef.current) {
       const textarea = textareaRef.current;
-      textarea.style.height = "auto";
+      //textarea.style.height = "auto";
       textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
+  
 
   return (
     <div className="search-container">
@@ -119,15 +167,18 @@ const Search = ({ textareaRef, enableMessages }) => {
         <textarea
           spellCheck="false"
           ref={textareaRef}
-          className="search-input"
+          className={`search-input ${TextareaScrollClass}`}
           placeholder={placeholder}
           onFocus={handleFocus}
           onBlur={handleBlur}
           onChange={handleChange} // Use onChange instead of onInput
+          onKeyDown={handleKeyDown}
           value={textareaValue} // Controlled component
-          rows="1"
+          rows="1" // each row is 56 chars
+          wrap="hard"
+          maxLength="500"
         />
-        <div className="search-button">
+        <div className={`search-button ${buttonEnabled ? "search-button-enabled": ""}`} onClick={buttonEnabled ?  handleSearch : null}>
           <img src={search} draggable="false" alt="search" />
           <p>Search</p>
         </div>

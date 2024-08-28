@@ -5,7 +5,7 @@ import arrowCurved from "../assets/vectors/arrow-curved.svg";
 const GetStarted = () => {
   return (
     <div className="get-started-container">
-      <img src={arrowCurved} />
+      <img src={arrowCurved} draggable="false"/>
       <p>Get Started—It's free</p>
     </div>
   );
