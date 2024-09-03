@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "deploy": "gh-pages -d dist --force"
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
