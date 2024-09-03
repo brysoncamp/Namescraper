@@ -17,11 +17,14 @@ const SearchPage = () => {
   return (
     <div className="center-vertically">
       <Topbar />
-      <Search
-        textareaRef={textareaRef}
-        enableMessages={false}
-        handleSearch={handleSearch}
-      />
+      <div class="sticky-search">
+        <Search
+          textareaRef={textareaRef}
+          enableMessages={false}
+          handleSearch={handleSearch}
+        />
+      </div>
+      
       <PromptOutput />
     </div>
   );

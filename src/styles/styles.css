@@ -65,10 +65,19 @@ html, body {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     transition: height 0.3s ease-out;
-    overflow-y: hidden;
+
+
+    -webkit-mask-image: linear-gradient(to right, white 85%, transparent 955%);
+    mask-image: linear-gradient(to right, white 85%, transparent 95%);
+    white-space: nowrap;  
+    overflow: hidden;
 }
 
 .search-input-scroll {
+    -webkit-mask-image: none;
+    mask-image: none;
+    white-space: wrap;  
+    overflow: visible;
     overflow-y: auto;
 }
 
@@ -215,7 +224,7 @@ textarea:focus {
 }
 
 .signup-button:hover {
-    outline: 2px solid #b6e9e9;
+    outline: 1px solid #b6e9e9;
 }
 
 .logo-text-highlight {
@@ -272,13 +281,14 @@ textarea:focus {
 
     .landing-hook {
         font-size: 2.125rem;
-        margin-top: 12vh;
+        margin-top: 15vh;
         margin-bottom: 4vh;
     }
 
     .landing-description {
         font-size: 1rem;
         width: calc(100vw - 1rem);
+        margin-bottom: 16vh;
     }
 
 
@@ -306,7 +316,7 @@ textarea:focus {
 
     .sticky-search {
         position: sticky;
-        top: 4.5rem;
+        top: 4rem;
         z-index: 1000;
     }
 
@@ -337,7 +347,27 @@ textarea:focus {
     }
 
     .search-container {
-        padding-top: 0;
+        padding-top: 0.75rem;
+        margin-top: -0.75rem;
+    }
+
+    .get-started-container {
+        margin-left: 6rem;
+        width: 100vw;
+    }
+    
+    .get-started-container img {
+        width: 3rem;
+    }
+
+    .get-started-container p {
+        font-size: 1.25rem;
+        font-weight: 400;
+    }
+
+    .signup-button {
+        font-size: 1rem;
+        padding: 0.25rem 0.5rem;
     }
     
 }

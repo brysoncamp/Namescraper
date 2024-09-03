@@ -10,17 +10,26 @@ const HomePage = () => {
   const navigate = useNavigate();
   const searchRef = useRef(null);
   const textareaRef = useRef(null);
-  const [distanceFromTop, setDistanceFromTop] = useState(0);
   const [scrollAmount, setScrollAmount] = useState(0);
   const [isSticky, setIsSticky] = useState(false);
+  const [exitY, setExitY] = useState(0);
 
   useEffect(() => {
     const rootElement = document.getElementById('root');
 
+    const calculateExitPosition = () => {
+      if (searchRef.current && rootElement) {
+        const rect = searchRef.current.getBoundingClientRect();
+        const rootTop = rootElement.getBoundingClientRect().top;
+        const calculatedDistance = rect.top - rootTop + rootElement.scrollTop;
+        const calculatedExitY = isSticky ? 0 : -(calculatedDistance - scrollAmount - 60);
+        setExitY(calculatedExitY);
+      }
+    };
+
     const handleScroll = () => {
       if (searchRef.current) {
         const rect = searchRef.current.getBoundingClientRect();
-        const rootTop = rootElement.getBoundingClientRect().top;
 
         // Check if the search bar has reached the top
         if (rect.top <= 0 && !isSticky) {
@@ -35,9 +44,7 @@ const HomePage = () => {
     };
 
     if (searchRef.current && rootElement) {
-      const rect = searchRef.current.getBoundingClientRect();
-      const rootTop = rootElement.getBoundingClientRect().top;
-      setDistanceFromTop(rect.top - rootTop + rootElement.scrollTop);
+      calculateExitPosition();
     }
 
     // Add the scroll event listener to the #root element
@@ -45,43 +52,50 @@ const HomePage = () => {
       rootElement.addEventListener("scroll", handleScroll);
     }
 
+    // Recalculate the exit position when the sticky state or scroll amount changes
+    if (rootElement) {
+      rootElement.addEventListener("scroll", calculateExitPosition);
+    }
+
     // Cleanup the event listener on component unmount
     return () => {
       if (rootElement) {
         rootElement.removeEventListener("scroll", handleScroll);
+        rootElement.removeEventListener("scroll", calculateExitPosition);
       }
     };
-  }, [isSticky]);
+  }, [isSticky, scrollAmount]);
 
   const handleSearch = () => {
     const searchTerm = textareaRef.current?.value || ""; // Get the value from the textarea
     navigate(`/search?term=${encodeURIComponent(searchTerm)}`); // Navigate with the search term as a query parameter
   };
 
+  const navigateToSearch = () => {
+    navigate("/search");
+  }
+
   return (
     <div className="center-vertically">
 
-        <Topbar />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}  // Fade out to transparent on exit
-          transition={{ duration: 0.25 }}
-        >
-          <LandingHook />
-        </motion.div>
-    
-   
-
+      <Topbar />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}  // Fade out to transparent on exit
+        transition={{ duration: 0.25 }}
+      >
+        <LandingHook />
+      </motion.div>
       <motion.div
         ref={searchRef}
         initial={{ y: 0 }}
         animate={{ y: 0 }}
-        exit={{ y: isSticky ? 0 : -(distanceFromTop - scrollAmount) }} // Move the div up by the distance from the top, or to 0 if sticky
+        exit={{ y: exitY }} // Use pre-calculated exitY
         transition={{ duration: 0.5, ease: "easeInOut" }}
         className="sticky-search"
       >
-        <Search textareaRef={textareaRef} enableMessages={true} handleSearch={handleSearch} />
+        <Search textareaRef={textareaRef} enableMessages={true} handleSearch={handleSearch} navigateToSearch={navigateToSearch} />
       </motion.div>
 
       <motion.div
