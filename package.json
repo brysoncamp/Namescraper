@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "deploy:test": "vite build && gh-pages -d dist -b test",
-    "deploy:prod": "vite build && gh-pages -d dist -b main"
+    "build": "vite build",
+    "deploy": "gh-pages -d dist --force"
   },
   "repository": {
     "type": "git",
