@@ -60,7 +60,7 @@ const HomePage = () => {
 
   return (
     <div className="center-vertically">
-      <div>
+
         <Topbar />
         <motion.div
           initial={{ opacity: 0 }}
@@ -70,7 +70,7 @@ const HomePage = () => {
         >
           <LandingHook />
         </motion.div>
-      </div>
+    
    
 
       <motion.div
@@ -80,7 +80,6 @@ const HomePage = () => {
         exit={{ y: isSticky ? 0 : -(distanceFromTop - scrollAmount) }} // Move the div up by the distance from the top, or to 0 if sticky
         transition={{ duration: 0.5, ease: "easeInOut" }}
         className="sticky-search"
-        style={{ position: "sticky", top: "0", zIndex: 10, backgroundColor: "white" }}
       >
         <Search textareaRef={textareaRef} enableMessages={true} handleSearch={handleSearch} />
       </motion.div>
