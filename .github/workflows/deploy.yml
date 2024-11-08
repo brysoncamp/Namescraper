@@ -11,18 +11,7 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3 
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3  
-        with:
-          node-version: '20'  
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Build Project
-        run: npm vite build  
+        uses: actions/checkout@v3
 
       - name: Install AWS CLI
         run: |
@@ -34,6 +23,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: us-east-1 
+          AWS_REGION: us-east-1
         run: |
           aws s3 sync dist s3://namescraper-frontend --region $AWS_REGION --delete
