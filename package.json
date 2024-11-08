@@ -19,6 +19,9 @@
   },
   "homepage": "https://brysoncamp.github.io/Namescraper",
   "dependencies": {
+    "@aws-amplify/auth": "^6.6.0",
+    "@aws-amplify/ui-react": "^6.5.5",
+    "aws-amplify": "^6.8.0",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.3.30",
     "openai": "^4.56.0",

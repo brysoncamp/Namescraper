@@ -1,29 +1,34 @@
-name: Deploy to GitHub Pages
+name: Deploy to S3
 
 on:
   push:
     branches:
-      - master  # or your default branch
+      - main 
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3  # Updated to use checkout version 3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3  # Updated to reflect the latest version
-      with:
-        node-version: '20'  # Updated to use Node.js version 20
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' 
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install Dependencies
+        run: npm install
 
-    - name: Build
-      run: npm run build
+      - name: Build Project
+        run: npm run build  
 
-    - name: Deploy
-      run: npm run deploy
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy to S3
+        uses: aws-actions/s3-sync-action@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          bucket: namescraper-frontend  
+          region: us-east-1 
+          source-dir: dist  
